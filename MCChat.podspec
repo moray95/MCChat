@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "MCChat"
-  s.version          = "0.0.1"
+  s.version          = "0.0.2"
   s.summary          = "A library facilitating chat over multipeer connectivity."
   s.description      = <<-DESC
                        MCChat is a library that facilitates chat using the multipeer connectivity framework.You can chat, select avatars, input personal information, see where people are without the need of any server setup!
