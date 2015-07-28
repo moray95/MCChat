@@ -76,7 +76,7 @@ class ChatViewController: JSQMessagesViewController,
         collectionView!.delegate = self
         NSUserDefaults.sessionDate = NSDate()
         title = "Chat (0)"
-        print(CLLocationManager.authorizationStatus().rawValue)
+
         if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined
         {
             locationManager.requestWhenInUseAuthorization()
@@ -94,7 +94,6 @@ class ChatViewController: JSQMessagesViewController,
         session!.delegate = self
         senderDisplayName = session!.myPeerID.displayName
         senderId = session!.myPeerID.displayName
-		print(serviceType)
         browser = MCNearbyServiceBrowser(peer: session!.myPeerID, serviceType: serviceType)
         browser!.delegate = self
         browser!.startBrowsingForPeers()
@@ -151,10 +150,10 @@ class ChatViewController: JSQMessagesViewController,
                                      senderDisplayName: String!,
                                      date: NSDate!)
     {
-        print("sending: \(text) to:")
+        println("sending: \(text) to:")
         for peer in session!.connectedPeers
         {
-            print(peer.displayName)
+            println(peer.displayName)
         }
         let message = Message(sender: senderDisplayName, body: text)
 
@@ -166,7 +165,7 @@ class ChatViewController: JSQMessagesViewController,
 
 		if session!.connectedPeers.count != 0 && error != nil
 		{
-			print("error sending message : \(error)")
+			println("error sending message : \(error)")
 		}
 
 
@@ -176,9 +175,9 @@ class ChatViewController: JSQMessagesViewController,
             JSQSystemSoundPlayer.jsq_playMessageSentSound()
         }
         dispatch_async(dispatch_get_main_queue())
-            {
-                self.finishSendingMessageAnimated(true)
-            }
+		{
+			self.finishSendingMessageAnimated(true)
+        }
 
     }
 
@@ -230,7 +229,7 @@ class ChatViewController: JSQMessagesViewController,
 
 			if self.session!.connectedPeers.count != 0 && error != nil
 			{
-				print("Sending image failed with error: \(error)")
+				println("Sending image failed with error: \(error)")
 			}
 
 			let message = Message(sender: self.senderDisplayName, body: "")
@@ -373,7 +372,7 @@ class ChatViewController: JSQMessagesViewController,
         {
             // Got location
             let location = messageObject as! CLLocation
-            print("Received location from \(peerID.displayName)")
+            println("Received location from \(peerID.displayName)")
             locations[peerID.displayName] = location
             return
         }
@@ -384,14 +383,14 @@ class ChatViewController: JSQMessagesViewController,
         {
             // Got text message
             message = Message(sender: peerID.displayName, body:  messageObject as! NSString as String)
-            print("Received message: \(message.body)")
+            println("Received message: \(message.body)")
             messages.append(message)
         }
 
         if type == .ImageMessage
         {
             // Got image message
-            print("received image from \(peerID.displayName)")
+            println("received image from \(peerID.displayName)")
             message = Message(sender: peerID.displayName, body: "")
             message.image = messageObject as? UIImage
             messages.append(message)
@@ -441,7 +440,7 @@ class ChatViewController: JSQMessagesViewController,
         switch state
         {
         case .Connected:
-            print("\(peerID.displayName) is now conected.")
+            println("\(peerID.displayName) is now conected.")
 
             if find(connectedUsers, peerID.displayName) == nil
             {
@@ -457,7 +456,7 @@ class ChatViewController: JSQMessagesViewController,
 
                 if session.connectedPeers.count > 0
                 {
-                    print("Error sending info to \(peerID.displayName): \(error)")
+                    println("Error sending info to \(peerID.displayName): \(error)")
                 }
 
             let message = Message(systemMessage: peerID.displayName, body: peerID.displayName + " has connected.")
@@ -470,9 +469,9 @@ class ChatViewController: JSQMessagesViewController,
             title = "Chat (\(session.connectedPeers.count))"
 
         case .Connecting:
-            print("\(peerID.displayName) is now connecting.")
+            println("\(peerID.displayName) is now connecting.")
         case .NotConnected:
-            print("\(peerID.displayName) has disconnected.")
+            println("\(peerID.displayName) has disconnected.")
 
             if contains(connectedUsers, peerID.displayName) && !contains(session.connectedPeers as! [MCPeerID], peerID)
 			{
@@ -498,7 +497,7 @@ class ChatViewController: JSQMessagesViewController,
 
 		if date.compare(NSUserDefaults.sessionDate) == .OrderedAscending
 		{
-			print("Joining older session")
+			println("Joining older session")
 			invitationHandler(true, session!)
 			NSUserDefaults.sessionDate = date
 			for peer in session!.connectedPeers
@@ -511,7 +510,7 @@ class ChatViewController: JSQMessagesViewController,
     // MARK: MCNearbyServiceBrowserDelegate
 	func browser(browser: MCNearbyServiceBrowser!, foundPeer peerID: MCPeerID!, withDiscoveryInfo info: [NSObject : AnyObject]!)
     {
-        print("Inviting \(peerID.displayName)")
+        println("Inviting \(peerID.displayName)")
 
         browser.invitePeer(peerID, toSession: session!,
                            withContext: NSKeyedArchiver.archivedDataWithRootObject(NSUserDefaults.sessionDate),
@@ -521,7 +520,7 @@ class ChatViewController: JSQMessagesViewController,
 
 	func browser(browser: MCNearbyServiceBrowser!, lostPeer peerID: MCPeerID!)
     {
-        print("Lost peer: \(peerID.displayName)")
+        println("Lost peer: \(peerID.displayName)")
     }
 
     // MARK: UITableViewDataSource (DetailsViewController)
@@ -544,7 +543,7 @@ class ChatViewController: JSQMessagesViewController,
 	func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!)
     {
         MCChat.locations[NSUserDefaults.displayName] = locations.last! as? CLLocation
-        print("Location updated")
+        println("Location updated")
 		var error : NSError? = nil
 
 		session?.sendData(NSData.dataForLocation(locations.last! as! CLLocation),
@@ -554,7 +553,7 @@ class ChatViewController: JSQMessagesViewController,
 
 		if session?.connectedPeers.count > 0
 		{
-			print("Error sending location data: \(error)")
+			println("Error sending location data: \(error)")
 		}
 
     }

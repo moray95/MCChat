@@ -30,8 +30,6 @@ class SettingsViewController: UIViewController,
     {
         super.viewDidLoad()
 
-        print(imageView.superview!.frame)
-
         let recognizer = UITapGestureRecognizer(target: self, action: "selectImage:")
         imageView.userInteractionEnabled = true
         recognizer.numberOfTapsRequired = 1
@@ -90,7 +88,7 @@ class SettingsViewController: UIViewController,
     {
         /*let reachability = Reachability.reachabilityForInternetConnection()
         let networkStatus = reachability.currentReachabilityStatus()
-        print("Network status: \(networkStatus)")
+        println("Network status: \(networkStatus)")
 
         if identifier != "showHexMap" && identifier != "showMap"
         {
