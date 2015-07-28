@@ -1,0 +1,20 @@
+PODS:
+  - JSQMessagesViewController (7.1.0):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
+  - MCChat (0.1.0):
+    - JSQMessagesViewController
+
+DEPENDENCIES:
+  - MCChat (from `../`)
+
+EXTERNAL SOURCES:
+  MCChat:
+    :path: ../
+
+SPEC CHECKSUMS:
+  JSQMessagesViewController: ca11f86fa68ca70835f05e169df9244147c1dc40
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  MCChat: 37361e9f5c65ae76b1a5591b6c3b26d67c898222
+
+COCOAPODS: 0.38.2

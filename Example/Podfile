@@ -1,0 +1,14 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+link_with 'MCChat_Example'
+
+target 'MCChat_Example', :exclusive => true do
+  pod "MCChat", :path => "../"
+end
+
+target 'MCChat_Tests', :exclusive => true do
+  pod "MCChat", :path => "../"
+
+  
+end
