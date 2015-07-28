@@ -33,7 +33,9 @@ public class MCChatLoader
 {
 	public class func instantiateChatViewController() -> UIViewController
 	{
-		assert(serviceType.length > 0 && serviceType.length < 16, "Your should set serviceType variable to a unique value for MCChat to work properly.")
+		assert(serviceType.length > 0 && serviceType.length < 16,
+				"Your should set serviceType variable to a unique value for MCChat to work properly.")
+		
 		let bundle = NSBundle(forClass: self)
 
 		let storyboard = UIStoryboard(name: "Main", bundle: bundle)
@@ -48,8 +50,8 @@ class ChatViewController: JSQMessagesViewController,
                           UIImagePickerControllerDelegate,
                           UIActionSheetDelegate,
                           MCSessionDelegate,
-                          //MCNearbyServiceBrowserDelegate,
-                          //MCNearbyServiceAdvertiserDelegate,
+                          MCNearbyServiceBrowserDelegate,
+                          MCNearbyServiceAdvertiserDelegate,
                           UITableViewDataSource,
                           CLLocationManagerDelegate
 {
@@ -92,13 +94,14 @@ class ChatViewController: JSQMessagesViewController,
         session!.delegate = self
         senderDisplayName = session!.myPeerID.displayName
         senderId = session!.myPeerID.displayName
+		print(serviceType)
         browser = MCNearbyServiceBrowser(peer: session!.myPeerID, serviceType: serviceType)
-        //browser?.delegate = self
-        browser?.startBrowsingForPeers()
+        browser!.delegate = self
+        browser!.startBrowsingForPeers()
         collectionView?.collectionViewLayout.springinessEnabled = true
 
         advertiser = MCNearbyServiceAdvertiser(peer: session!.myPeerID, discoveryInfo: nil, serviceType: serviceType)
-        //advertiser!.delegate = self
+        advertiser!.delegate = self
         advertiser!.startAdvertisingPeer()
 
         super.viewWillAppear(animated)
@@ -489,30 +492,24 @@ class ChatViewController: JSQMessagesViewController,
     }
 
     // MARK: MCNearbyServiceAdvertiserDelegate
+	func advertiser(advertiser: MCNearbyServiceAdvertiser!, didReceiveInvitationFromPeer peerID: MCPeerID!, withContext context: NSData!, invitationHandler: ((Bool, MCSession!) -> Void)!)
+	{
+		let date = NSKeyedUnarchiver.unarchiveObjectWithData(context!) as! NSDate
 
-    func advertiser(advertiser: MCNearbyServiceAdvertiser,
-                    didReceiveInvitationFromPeer peerID: MCPeerID,
-                    withContext context: NSData?,
-                    invitationHandler: (Bool, MCSession) -> Void)
-    {
-        let date = NSKeyedUnarchiver.unarchiveObjectWithData(context!) as! NSDate
-
-        if date.compare(NSUserDefaults.sessionDate) == .OrderedAscending
-        {
-            print("Joining older session")
-            invitationHandler(true, session!)
-            NSUserDefaults.sessionDate = date
-            for peer in session!.connectedPeers
-            {
-                browser?.invitePeer(peer as! MCPeerID, toSession: session!, withContext: NSKeyedArchiver.archivedDataWithRootObject(date), timeout: timeout)
-            }
-        }
-    }
+		if date.compare(NSUserDefaults.sessionDate) == .OrderedAscending
+		{
+			print("Joining older session")
+			invitationHandler(true, session!)
+			NSUserDefaults.sessionDate = date
+			for peer in session!.connectedPeers
+			{
+				browser?.invitePeer(peer as! MCPeerID, toSession: session!, withContext: NSKeyedArchiver.archivedDataWithRootObject(date), timeout: timeout)
+			}
+		}
+	}
 
     // MARK: MCNearbyServiceBrowserDelegate
-    func browser(browser: MCNearbyServiceBrowser,
-        foundPeer peerID: MCPeerID,
-        withDiscoveryInfo info: [String : String]?)
+	func browser(browser: MCNearbyServiceBrowser!, foundPeer peerID: MCPeerID!, withDiscoveryInfo info: [NSObject : AnyObject]!)
     {
         print("Inviting \(peerID.displayName)")
 
@@ -522,8 +519,7 @@ class ChatViewController: JSQMessagesViewController,
         
     }
 
-    func browser(browser: MCNearbyServiceBrowser,
-        lostPeer peerID: MCPeerID)
+	func browser(browser: MCNearbyServiceBrowser!, lostPeer peerID: MCPeerID!)
     {
         print("Lost peer: \(peerID.displayName)")
     }
