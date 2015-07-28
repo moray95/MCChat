@@ -1,6 +1,5 @@
 # MCChat
 
-[![CI Status](http://img.shields.io/travis/Moray Baruh/MCChat.svg?style=flat)](https://travis-ci.org/Moray Baruh/MCChat)
 [![Version](https://img.shields.io/cocoapods/v/MCChat.svg?style=flat)](http://cocoapods.org/pods/MCChat)
 [![License](https://img.shields.io/cocoapods/l/MCChat.svg?style=flat)](http://cocoapods.org/pods/MCChat)
 [![Platform](https://img.shields.io/cocoapods/p/MCChat.svg?style=flat)](http://cocoapods.org/pods/MCChat)
@@ -11,6 +10,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 iOS 7.0+
+
 Device with BLE.
 
 ## Installation
