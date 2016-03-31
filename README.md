@@ -4,6 +4,8 @@
 [![License](https://img.shields.io/cocoapods/l/MCChat.svg?style=flat)](http://cocoapods.org/pods/MCChat)
 [![Platform](https://img.shields.io/cocoapods/p/MCChat.svg?style=flat)](http://cocoapods.org/pods/MCChat)
 
+A simple framework for integrating chat services in your iOS application using Multipeer Connectivity.
+
 ## Usage
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
